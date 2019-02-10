@@ -1,0 +1,22 @@
+<footer id="footer" *mobxAutorun>
+    <div *ngIf="todos.todos.isNotEmpty">
+        <span id="todo-count" *mobxAutorun>
+              <strong>{{todos.itemsDescription}}</strong>
+        </span>
+        <ul id="filters">
+            <li>
+                <a [class.selected]="todos.filter == VisibilityFilter.all"
+                   (click)="todos.changeFilter(VisibilityFilter.all)">All</a>
+            </li>
+            <li>
+                <a [class.selected]="todos.filter == VisibilityFilter.pending"
+                   (click)="todos.changeFilter(VisibilityFilter.pending)">Pending</a>
+            </li>
+            <li>
+                <a [class.selected]="todos.filter == VisibilityFilter.completed"
+                   (click)="todos.changeFilter(VisibilityFilter.completed)">Completed</a>
+            </li>
+        </ul>
+        <button id="clear-completed" (click)="todos.removeCompleted()" *ngIf="todos.canRemoveAllCompleted">Clear completed</button>
+    </div>
+</footer>
