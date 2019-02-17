@@ -17,7 +17,7 @@ class MobxReactionDirective extends MobxAutorunDirective {
 
   void createReaction() {
     dispose = reaction(_reaction, (_) {
-      view.detectChanges();
+      view.markForCheck();
     });
   }
 }

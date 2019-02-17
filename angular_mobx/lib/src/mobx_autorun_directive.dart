@@ -7,7 +7,6 @@ class MobxAutorunDirective implements OnInit, OnDestroy {
   ViewContainerRef viewContainer;
   dynamic view;
   var dispose;
-
   String _autorunDescription;
 
   @Input()
