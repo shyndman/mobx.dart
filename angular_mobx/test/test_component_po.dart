@@ -14,10 +14,15 @@ abstract class TestComponentPO {
   @ById('fullname')
   PageLoaderElement get _fullName;
 
-  @ByTagName('button')
+  @ById('setLastNameBtn')
   PageLoaderElement get _button;
 
   Future<void> clickButton() => _button.click();
+//
+  @ById('unrelatedBtn')
+  PageLoaderElement get _unrelatedBtn;
+
+  Future<void> clickUnrelatedButton() => _unrelatedBtn.click();
 
   String get fullName => _fullName.visibleText;
 }

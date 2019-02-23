@@ -8,7 +8,9 @@ import 'package:angular_mobx/angular_mobx.dart';
 <div *mobxAutorun>
   <span id="fullname">{{store.fullName}}</span>
 </div>
-<button (click)="setLastName()">Set Name</button>
+<button id="setLastNameBtn" (click)="setLastName()">Set Name</button>
+<button id="unrelatedBtn" (click)="doSomethingUnrelated()">Do something unrelated</button>
+
   ''',
   changeDetection: ChangeDetectionStrategy.OnPush,
   directives: [MobxAutorunDirective],
@@ -19,4 +21,6 @@ class TestAutorunComponent {
   void setLastName() {
     store.setNames(store.firstName, 'Dean');
   }
+
+  doSomethingUnrelated() {}
 }

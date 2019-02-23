@@ -42,6 +42,18 @@ class $TestComponentPO extends TestComponentPO with $$TestComponentPO {
     }
     return returnMe;
   }
+
+  Future<void> clickUnrelatedButton() {
+    for (final __listener in $__root__.listeners) {
+      __listener.startPageObjectMethod(
+          'TestComponentPO', 'clickUnrelatedButton');
+    }
+    final returnMe = super.clickUnrelatedButton();
+    for (final __listener in $__root__.listeners) {
+      __listener.endPageObjectMethod('TestComponentPO', 'clickUnrelatedButton');
+    }
+    return returnMe;
+  }
 }
 
 class $$TestComponentPO {
@@ -64,10 +76,22 @@ class $$TestComponentPO {
     for (final __listener in $__root__.listeners) {
       __listener.startPageObjectMethod('TestComponentPO', '_button');
     }
-    final element = $__root__.createElement(ByTagName('button'), [], []);
+    final element = $__root__.createElement(ById('setLastNameBtn'), [], []);
     final returnMe = element;
     for (final __listener in $__root__.listeners) {
       __listener.endPageObjectMethod('TestComponentPO', '_button');
+    }
+    return returnMe;
+  }
+
+  PageLoaderElement get _unrelatedBtn {
+    for (final __listener in $__root__.listeners) {
+      __listener.startPageObjectMethod('TestComponentPO', '_unrelatedBtn');
+    }
+    final element = $__root__.createElement(ById('unrelatedBtn'), [], []);
+    final returnMe = element;
+    for (final __listener in $__root__.listeners) {
+      __listener.endPageObjectMethod('TestComponentPO', '_unrelatedBtn');
     }
     return returnMe;
   }

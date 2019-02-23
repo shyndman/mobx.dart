@@ -37,13 +37,39 @@ void basicTests() {
   });
 
   test('Should recompute on button click', () async {
+    expect(fullNameCalculations, 1);
     await po.clickButton();
+    expect(fullNameCalculations, 2);
     expect(await po.fullName, 'James Dean');
   });
-
+  test('Should not recompute on access to html element with computed value', () async {
+    expect(fullNameCalculations, 1);
+    expect(await po.fullName, 'James Bond');
+    expect(fullNameCalculations, 1);
+    expect(await po.fullName, 'James Bond');
+    expect(await po.fullName, 'James Bond');
+    expect(await po.fullName, 'James Bond');
+    expect(await po.fullName, 'James Bond');
+    expect(fullNameCalculations, 1);
+  });
   test('Should change content on external change', () async {
     expect(await po.fullName, 'James Bond');
+    expect(fullNameCalculations, 1);
     globalStore.setNames('Robert', 'Dean');
     expect(await po.fullName, 'Robert Dean');
+    expect(fullNameCalculations, 2);
+  });
+  test('Should recompute value on each action', () async {
+    expect(fullNameCalculations, 1);
+    globalStore.setNames('Robert', 'Dean');
+    globalStore.setNames('Robert', 'Dean');
+    expect(fullNameCalculations, 3);
+  });
+  test('Should not recompute on unrelated input from outside', () async {
+    expect(fullNameCalculations, 1);
+    await po.clickUnrelatedButton();
+    await po.clickUnrelatedButton();
+    await po.clickUnrelatedButton();
+    expect(fullNameCalculations, 1);
   });
 }
