@@ -4,7 +4,7 @@
       <ul id="todo-list">
             <li *ngFor="let todo of todos.visibleTodos" [class.completed]="todo.done">
                   <div class="view">
-                        <input class="toggle" type="checkbox" [checked]="todo.done" (change)="todo.toggleStatus()">
+                        <input class="toggle" type="checkbox" [checked]="todo.isDoneChecked" (change)="todo.toggleStatus()">
                         <label>{{todo.description}}</label>
                         <button class="destroy" (click)="todos.removeTodo(todo)"></button>
                   </div>
