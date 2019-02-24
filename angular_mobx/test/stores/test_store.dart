@@ -19,6 +19,8 @@ abstract class _TestStore implements Store {
   String firstName = "James";
   @observable
   String lastName = "Bond";
+  @observable
+  bool isAdult = false;
 
   @computed
   String get fullName {
@@ -26,9 +28,15 @@ abstract class _TestStore implements Store {
     return '$firstName $lastName';
   }
 
+
   @action
   setNames(String firstName, String lastName) {
     this.firstName = firstName;
     this.lastName = lastName;
+  }
+
+  @action
+  toggleAdult() {
+    isAdult = !isAdult;
   }
 }

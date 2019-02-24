@@ -21,6 +21,17 @@ class $TestComponentPO extends TestComponentPO with $$TestComponentPO {
       "classes that have @CheckTag annotation.";
   static String get tagName =>
       throw '"tagName" is not defined by Page Object "TestComponentPO". Requires @CheckTag annotation in order for "tagName" to be generated.';
+  bool get isAdultChecked {
+    for (final __listener in $__root__.listeners) {
+      __listener.startPageObjectMethod('TestComponentPO', 'isAdultChecked');
+    }
+    final returnMe = super.isAdultChecked;
+    for (final __listener in $__root__.listeners) {
+      __listener.endPageObjectMethod('TestComponentPO', 'isAdultChecked');
+    }
+    return returnMe;
+  }
+
   String get fullName {
     for (final __listener in $__root__.listeners) {
       __listener.startPageObjectMethod('TestComponentPO', 'fullName');
@@ -51,6 +62,17 @@ class $TestComponentPO extends TestComponentPO with $$TestComponentPO {
     final returnMe = super.clickUnrelatedButton();
     for (final __listener in $__root__.listeners) {
       __listener.endPageObjectMethod('TestComponentPO', 'clickUnrelatedButton');
+    }
+    return returnMe;
+  }
+
+  Future<void> clickIsAdultCheck() {
+    for (final __listener in $__root__.listeners) {
+      __listener.startPageObjectMethod('TestComponentPO', 'clickIsAdultCheck');
+    }
+    final returnMe = super.clickIsAdultCheck();
+    for (final __listener in $__root__.listeners) {
+      __listener.endPageObjectMethod('TestComponentPO', 'clickIsAdultCheck');
     }
     return returnMe;
   }
@@ -92,6 +114,18 @@ class $$TestComponentPO {
     final returnMe = element;
     for (final __listener in $__root__.listeners) {
       __listener.endPageObjectMethod('TestComponentPO', '_unrelatedBtn');
+    }
+    return returnMe;
+  }
+
+  PageLoaderElement get _checkbox {
+    for (final __listener in $__root__.listeners) {
+      __listener.startPageObjectMethod('TestComponentPO', '_checkbox');
+    }
+    final element = $__root__.createElement(ByTagName('input'), [], []);
+    final returnMe = element;
+    for (final __listener in $__root__.listeners) {
+      __listener.endPageObjectMethod('TestComponentPO', '_checkbox');
     }
     return returnMe;
   }

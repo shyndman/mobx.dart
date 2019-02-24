@@ -24,5 +24,12 @@ abstract class TestComponentPO {
 
   Future<void> clickUnrelatedButton() => _unrelatedBtn.click();
 
+  @ByTagName('input')
+  PageLoaderElement get _checkbox;
+
+   bool get isAdultChecked => _checkbox.properties['checked'] == 'true';
+
+  Future<void> clickIsAdultCheck() => _checkbox.click();
+
   String get fullName => _fullName.visibleText;
 }

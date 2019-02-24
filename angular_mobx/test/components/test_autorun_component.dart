@@ -6,6 +6,7 @@ import 'package:angular_mobx/angular_mobx.dart';
   selector: 'my-app',
   template: '''
 <div *mobxAutorun>
+  <input type="checkbox" [checked]="store.isAdult"  (change)="store.toggleAdult()">
   <span id="fullname">{{store.fullName}}</span>
 </div>
 <button id="setLastNameBtn" (click)="setLastName()">Set Name</button>

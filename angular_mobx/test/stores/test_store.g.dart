@@ -45,6 +45,21 @@ mixin _$TestStore on _TestStore, Store {
     _$lastNameAtom.reportChanged();
   }
 
+  final _$isAdultAtom = Atom(name: '_TestStore.isAdult');
+
+  @override
+  bool get isAdult {
+    _$isAdultAtom.reportObserved();
+    return super.isAdult;
+  }
+
+  @override
+  set isAdult(bool value) {
+    mainContext.checkIfStateModificationsAreAllowed(_$isAdultAtom);
+    super.isAdult = value;
+    _$isAdultAtom.reportChanged();
+  }
+
   final _$_TestStoreActionController = ActionController(name: '_TestStore');
 
   @override
@@ -52,6 +67,16 @@ mixin _$TestStore on _TestStore, Store {
     final _$actionInfo = _$_TestStoreActionController.startAction();
     try {
       return super.setNames(firstName, lastName);
+    } finally {
+      _$_TestStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic toggleAdult() {
+    final _$actionInfo = _$_TestStoreActionController.startAction();
+    try {
+      return super.toggleAdult();
     } finally {
       _$_TestStoreActionController.endAction(_$actionInfo);
     }

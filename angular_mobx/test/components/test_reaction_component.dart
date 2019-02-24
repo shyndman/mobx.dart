@@ -7,6 +7,7 @@ import 'package:angular_mobx/angular_mobx.dart';
   template: '''
 <div *mobxReaction="testChanges">
   <span id="fullname">{{store.fullName}}</span>
+  <input type="checkbox" [checked]="store.isAdult"  (change)="store.toggleAdult()">
 </div>
 <button id="setLastNameBtn" (click)="setLastName()">Set Name</button>
 <button id="unrelatedBtn" (click)="doSomethingUnrelated()">Do something unrelated</button>
@@ -23,5 +24,5 @@ class TestReactionComponent {
   }
 
   doSomethingUnrelated() {}
-  testChanges(_)=>store.fullName;
+  testChanges(_)=>'${store.fullName}|${store.isAdult}';
 }

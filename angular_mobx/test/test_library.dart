@@ -59,4 +59,22 @@ void basicTests(NgTestBed testBed) {
     await po.clickUnrelatedButton();
     expect(fullNameCalculations, 1);
   });
+  test('Checkbox click', () async {
+    expect(po.isAdultChecked, isFalse,
+        reason: 'initial value should be `false`');
+    expect(globalStore.isAdult, isFalse);
+    await po.clickIsAdultCheck();
+    expect(po.isAdultChecked, isTrue,
+        reason: 'Click on checkbox shoud toggle the value');
+    expect(globalStore.isAdult, isTrue);
+  });
+  test('Checkbox checked property should react on store changes', () async {
+    expect(globalStore.isAdult, isFalse);
+    globalStore.toggleAdult();
+    expect(
+      po.isAdultChecked,
+      isTrue,
+    );
+    expect(globalStore.isAdult, isTrue);
+  });
 }
