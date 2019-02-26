@@ -3,12 +3,12 @@ import 'package:store/store.dart';
 import 'package:angular_mobx/angular_mobx.dart';
 
 @Component(
-  selector: 'app-footer',
-  templateUrl: 'footer_component.html',
-  directives: [MobxAutorunDirective, NgIf],
-  exports: [VisibilityFilter]
-)
+    selector: 'app-footer',
+    templateUrl: 'footer_component.html',
+    directives: [NgIf],
+    exports: [VisibilityFilter, MobxAutorun])
 class FooterComponent {
   TodoList todos;
+
   FooterComponent(this.todos);
 }

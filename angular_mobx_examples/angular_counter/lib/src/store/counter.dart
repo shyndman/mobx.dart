@@ -5,12 +5,13 @@ part 'counter.g.dart';
 
 Counter counterSingleton = Counter();
 
-class Counter = CounterBase with _$Counter;
+class Counter = _Counter with _$Counter;
 
-abstract class CounterBase implements Store {
+abstract class _Counter implements Store {
   Timer timer;
   @observable
   int value = 0;
+
 
   @action
   void increment() {
@@ -22,15 +23,18 @@ abstract class CounterBase implements Store {
     value--;
   }
 
+  @action
   startTimer() {
     stopTimer();
     timer = Timer.periodic(Duration(seconds: 1), (_) => increment());
   }
-  
+
+  @action
   stopTimer() {
     if (timer != null) {
       timer.cancel();
       timer = null;
     }
   }
+
 }

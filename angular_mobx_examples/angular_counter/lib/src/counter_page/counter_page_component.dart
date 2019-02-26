@@ -1,15 +1,14 @@
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 
-import 'package:store/store.dart';
+import '../store/counter.dart';
 import 'package:angular_mobx/angular_mobx.dart';
-import 'package:mobx/mobx.dart';
 
 @Component(
   selector: 'counter-page',
   templateUrl: 'counter_page_component.html',
   styleUrls: ['counter_page_component.css'],
-  directives: [MaterialFabComponent, MobxAutorunDirective],
+  directives: [MaterialFabComponent, MobxAutorun],
   changeDetection: ChangeDetectionStrategy.OnPush,
 )
 class CounterPageComponent {

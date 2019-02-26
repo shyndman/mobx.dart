@@ -4,7 +4,6 @@ import 'package:test/test.dart';
 
 import 'components/test_reaction_component.dart';
 import 'components/test_reaction_component.template.dart' as ng;
-import 'stores/test_store.dart';
 import 'test_library.dart';
 
 void main() {

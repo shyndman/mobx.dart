@@ -2,7 +2,7 @@ import 'package:angular/angular.dart';
 import 'package:mobx/mobx.dart';
 
 @Directive(selector: '[mobxAutorun]')
-class MobxAutorunDirective implements OnInit, OnDestroy {
+class MobxAutorun implements OnInit, OnDestroy {
   TemplateRef templateRef;
   ViewContainerRef viewContainer;
   dynamic view;
@@ -14,7 +14,7 @@ class MobxAutorunDirective implements OnInit, OnDestroy {
     _autorunDescription = value == '' ? null : value;
   }
 
-  MobxAutorunDirective(this.templateRef, this.viewContainer);
+  MobxAutorun(this.templateRef, this.viewContainer);
 
   @override
   ngOnInit() {
@@ -33,6 +33,9 @@ class MobxAutorunDirective implements OnInit, OnDestroy {
   void createReaction() {
     dispose = autorun((_) {
       view.detectChanges();
+      if (_autorunDescription != null) {
+        print('Autorun $_autorunDescription');
+      }
     }, name: _autorunDescription);
   }
 }

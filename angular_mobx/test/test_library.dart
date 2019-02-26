@@ -7,13 +7,13 @@ import 'page_object/test_component_po.dart';
 NgTestFixture fixture;
 TestComponentPO po;
 
-void basicTests(NgTestBed testBed) {
+void basicTests(NgTestBed testBed, {SyncFn syncFunc: noOpExecuteSyncedFn}) {
   setUp(() async {
     globalStore = TestStore();
     clearGlobalCounters();
     fixture = await testBed.create();
-    final context =
-        HtmlPageLoaderElement.createFromElement(fixture.rootElement);
+    final context = HtmlPageLoaderElement.createFromElement(fixture.rootElement,
+        externalSyncFn: syncFunc);
     po = TestComponentPO.create(context);
   });
 

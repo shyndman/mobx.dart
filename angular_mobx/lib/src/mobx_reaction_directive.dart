@@ -4,7 +4,7 @@ import 'package:mobx/mobx.dart';
 import 'mobx_autorun_directive.dart';
 
 @Directive(selector: '[mobxReaction]')
-class MobxReactionDirective extends MobxAutorunDirective {
+class MobxReaction extends MobxAutorun {
   dynamic Function(Reaction) _reaction;
 
   @Input()
@@ -12,7 +12,7 @@ class MobxReactionDirective extends MobxAutorunDirective {
     _reaction = value;
   }
 
-  MobxReactionDirective(TemplateRef templateRef, ViewContainerRef viewContainer)
+  MobxReaction(TemplateRef templateRef, ViewContainerRef viewContainer)
       : super(templateRef, viewContainer);
   void createReaction() {
     dispose = reaction(_reaction, (_) {

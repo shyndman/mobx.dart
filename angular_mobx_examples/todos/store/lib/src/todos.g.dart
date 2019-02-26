@@ -6,6 +6,8 @@ part of 'todos.dart';
 // StoreGenerator
 // **************************************************************************
 
+// ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies
+
 mixin _$Todo on TodoBase, Store {
   final _$descriptionAtom = Atom(name: 'TodoBase.description');
 
@@ -37,6 +39,21 @@ mixin _$Todo on TodoBase, Store {
     _$doneAtom.reportChanged();
   }
 
+  final _$editingAtom = Atom(name: 'TodoBase.editing');
+
+  @override
+  bool get editing {
+    _$editingAtom.reportObserved();
+    return super.editing;
+  }
+
+  @override
+  set editing(bool value) {
+    mainContext.checkIfStateModificationsAreAllowed(_$editingAtom);
+    super.editing = value;
+    _$editingAtom.reportChanged();
+  }
+
   final _$TodoBaseActionController = ActionController(name: 'TodoBase');
 
   @override
@@ -49,6 +66,8 @@ mixin _$Todo on TodoBase, Store {
     }
   }
 }
+
+// ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies
 
 mixin _$TodoList on TodoListBase, Store {
   Computed<ObservableList<Todo>> _$pendingTodosComputed;
@@ -152,6 +171,21 @@ mixin _$TodoList on TodoListBase, Store {
     _$currentDescriptionAtom.reportChanged();
   }
 
+  final _$editedTodoAtom = Atom(name: 'TodoListBase.editedTodo');
+
+  @override
+  Todo get editedTodo {
+    _$editedTodoAtom.reportObserved();
+    return super.editedTodo;
+  }
+
+  @override
+  set editedTodo(Todo value) {
+    mainContext.checkIfStateModificationsAreAllowed(_$editedTodoAtom);
+    super.editedTodo = value;
+    _$editedTodoAtom.reportChanged();
+  }
+
   final _$TodoListBaseActionController = ActionController(name: 'TodoListBase');
 
   @override
@@ -219,6 +253,36 @@ mixin _$TodoList on TodoListBase, Store {
     final _$actionInfo = _$TodoListBaseActionController.startAction();
     try {
       return super.batchedToggleCompletion();
+    } finally {
+      _$TodoListBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void startEditing(Todo todo) {
+    final _$actionInfo = _$TodoListBaseActionController.startAction();
+    try {
+      return super.startEditing(todo);
+    } finally {
+      _$TodoListBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void cancelEditing() {
+    final _$actionInfo = _$TodoListBaseActionController.startAction();
+    try {
+      return super.cancelEditing();
+    } finally {
+      _$TodoListBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void saveChanges(Todo todo, String newDescription) {
+    final _$actionInfo = _$TodoListBaseActionController.startAction();
+    try {
+      return super.saveChanges(todo, newDescription);
     } finally {
       _$TodoListBaseActionController.endAction(_$actionInfo);
     }

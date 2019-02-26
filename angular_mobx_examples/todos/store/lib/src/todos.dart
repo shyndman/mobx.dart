@@ -13,6 +13,9 @@ abstract class TodoBase implements Store {
   @observable
   bool done = false;
 
+  @observable
+  bool editing = false;
+
   @action
   void toggleStatus() {
     done = !done;
@@ -69,7 +72,6 @@ abstract class TodoListBase implements Store {
     }
   }
 
-
   @computed
   bool get canRemoveAllCompleted =>
       hasCompletedTodos && filter != VisibilityFilter.pending;
@@ -83,6 +85,9 @@ abstract class TodoListBase implements Store {
 
   @action
   void addTodo(String description) {
+    if (description == null || description == '') {
+      return;
+    }
     final todo = Todo(description);
     todos.add(todo);
     currentDescription = '';
@@ -122,6 +127,36 @@ abstract class TodoListBase implements Store {
       for (final todo in todos) {
         todo.done = true;
       }
+    }
+  }
+
+  @observable
+  Todo editedTodo;
+
+  @action
+  void startEditing(Todo todo) {
+    cancelEditing();
+    todo.editing = true;
+    editedTodo = todo;
+  }
+
+  @action
+  void cancelEditing() {
+    if (editedTodo != null) {
+      editedTodo.editing = false;
+    }
+    editedTodo = null;
+  }
+
+  @action
+  void saveChanges(Todo todo, String newDescription) {
+    if(!todo.editing) {
+      return;
+    }
+    todo.description = newDescription;
+    cancelEditing();
+    if ((todo.description ?? '') == '') {
+      todos.remove(todo);
     }
   }
 }

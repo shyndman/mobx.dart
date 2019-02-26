@@ -1,13 +1,10 @@
-<section id="main" ng-show="todos.todos.isNotEmpty" class="" *mobxAutorun>
-      <input id="toggle-all" type="checkbox" [checked]="todos.allTasksAreCompleted" (change)="todos.batchedToggleCompletion()">
-      <label for="toggle-all">Mark all as complete</label>
-      <ul id="todo-list">
-            <li *ngFor="let todo of todos.visibleTodos" [class.completed]="todo.done">
-                  <div class="view">
-                        <input class="toggle" type="checkbox" [checked]="todo.isDoneChecked" (change)="todo.toggleStatus()">
-                        <label>{{todo.description}}</label>
-                        <button class="destroy" (click)="todos.removeTodo(todo)"></button>
-                  </div>
-            </li>
-      </ul>
-</section>
+<div *mobxAutorun>
+    <section id="main" ng-show="todos.todos.isNotEmpty" class="">
+        <input id="toggle-all" type="checkbox" [checked]="todos.allTasksAreCompleted"
+               (change)="todos.batchedToggleCompletion()">
+        <label for="toggle-all">Mark all as complete</label>
+        <ul id="todo-list">
+            <todo-item *ngFor="let todo of todos.visibleTodos" [todo]="todo"></todo-item>
+        </ul>
+    </section>
+</div>

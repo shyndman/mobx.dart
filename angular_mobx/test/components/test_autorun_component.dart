@@ -14,7 +14,7 @@ import 'package:angular_mobx/angular_mobx.dart';
 
   ''',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  directives: [MobxAutorunDirective],
+  directives: [MobxAutorun],
 )
 class TestAutorunComponent {
   var store = globalStore;
