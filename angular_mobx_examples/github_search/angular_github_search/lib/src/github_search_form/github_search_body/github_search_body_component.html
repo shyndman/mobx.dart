@@ -1,0 +1,23 @@
+<div *mobxAutorun>
+    <div>{{store.status}}</div>
+    <div>{{store.searchToken}}</div>
+  <!--<div *ngIf="state != null" class="mw10">-->
+    <div *ngIf="store.searchToken.isEmpty" class="tc">
+      <material-icon icon="info" class="light-blue"></material-icon>
+      <p>Please enter a term to begin</p>
+    </div>
+    <div *ngIf="store.status == StoreStatus.pending" class="tc"><material-spinner></material-spinner></div>
+    <div *ngIf="store.status == StoreStatus.rejected" class="tc">
+      <material-icon icon="error" class="light-red"></material-icon>
+      <p>{{ store.error }}</p>
+    </div>
+    <div *ngIf="store.status == StoreStatus.fulfilled">
+      <div *ngIf="store.repositories.isEmpty" class="tc">
+        <material-icon icon="warning" class="light-yellow"></material-icon>
+        <p>No Results</p>
+      </div>
+      <github-search-results></github-search-results>
+    </div>
+  <!--</div>-->
+
+</div>
