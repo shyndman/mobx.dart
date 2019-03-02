@@ -16,7 +16,7 @@ import 'package:angular_github_search/src/github_search.dart';
     SearchResultsComponent,
     MobxAutorun,
   ],
-  exports: [FutureStatus]
+  exports: [StoreStatus]
 )
 class SearchBodyComponent {
   GithubStore store;

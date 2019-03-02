@@ -1,23 +1,27 @@
 <div *mobxAutorun>
-    <div *ngIf="store.searchToken.isEmpty" class="tc">
+    <div *ngIf="store.status == StoreStatus.initial" class="tc">
         <material-icon icon="info" class="light-blue"></material-icon>
         <p>Please enter a term to begin</p>
     </div>
+    <div *ngIf="store.status == StoreStatus.waitingForNetwork" class="tc">
+        <material-icon icon="import_export" class="light-blue"></material-icon>
+    </div>
+    <div *ngIf="store.status == StoreStatus.waitingForKeyboard" class="tc">
+        <material-icon icon="keyboard" class="light-blue"></material-icon>
+    </div>
     <div *ngIf="store.isPending" class="tc">
-        <material-icon *ngIf="store.waitingForInputCompletion" icon="keyboard" class="light-blue"></material-icon>
-        <material-icon *ngIf="!store.waitingForInputCompletion" icon="import_export" class="light-blue"></material-icon>
         <material-spinner></material-spinner>
     </div>
-    <div *ngIf="store.fetchReposFuture.status == FutureStatus.rejected" class="tc">
+    <div *ngIf="store.status == StoreStatus.error" class="tc">
         <material-icon icon="error" class="light-red"></material-icon>
         <p>{{ store.fetchReposFuture.error }}</p>
     </div>
-    <div *ngIf="store.resultIsEmpty">
+    <div *ngIf="store.status == StoreStatus.emptyResult">
         <div class="tc">
             <material-icon icon="warning" class="light-yellow"></material-icon>
             <p>No Results</p>
         </div>
     </div>
-    <github-search-results *ngIf="store.hasResults"></github-search-results>
+    <github-search-results *ngIf="store.status == StoreStatus.hasResults"></github-search-results>
 
 </div>

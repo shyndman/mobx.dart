@@ -9,7 +9,7 @@ const millisecondsToDelay = 500;
 
 ReactionDisposer logState(GithubStore store) {
   return autorun((_) {
-    print(store.statusDescription);
+    print(store.storeStatusString);
   });
 }
 

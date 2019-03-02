@@ -8,6 +8,16 @@ part 'github_store.g.dart';
 
 class GithubStore = _GithubStore with _$GithubStore;
 
+enum StoreStatus {
+  initial,
+  emptyResult,
+  hasResults,
+  waitingForKeyboard,
+  waitingForNetwork,
+  error,
+  unknown
+}
+
 abstract class _GithubStore implements Store {
   GithubRepository githubRepository;
   Debouncer debouncer;
@@ -32,27 +42,30 @@ abstract class _GithubStore implements Store {
   String searchToken = '';
 
   @observable
-  bool waitingForInputCompletion = false;
+  bool waitingForKeyboard = false;
 
   @observable
   ObservableFuture fetchReposFuture = emptyResponse;
 
   @observable
-  bool isEmpty = true;
+  bool isRepositoryListEmpty = true;
 
   @computed
   bool get hasResults =>
-      !isEmpty && fetchReposFuture.status == FutureStatus.fulfilled;
+      !isRepositoryListEmpty &&
+      fetchReposFuture.status == FutureStatus.fulfilled;
 
   @computed
   bool get isPending =>
-      fetchReposFuture.status == FutureStatus.pending ||
-      waitingForInputCompletion;
+      fetchReposFuture.status == FutureStatus.pending || waitingForKeyboard;
+
+  @computed
+  bool get waitingForNetwork => fetchReposFuture.status == FutureStatus.pending;
 
   @computed
   bool get resultIsEmpty =>
       fetchReposFuture.status == FutureStatus.fulfilled &&
-      isEmpty &&
+      isRepositoryListEmpty &&
       searchToken.isNotEmpty &&
       !isPending;
 
@@ -60,8 +73,34 @@ abstract class _GithubStore implements Store {
   bool get isRejected => fetchReposFuture.status == FutureStatus.rejected;
 
   @computed
-  String get statusDescription =>
-      'searchToken: $searchToken, isPending: $isPending, resultIsEmpty $resultIsEmpty, waitingForInput: $waitingForInputCompletion, hasResults: $hasResults, count: ${repositories.length}, isEmpty: $isEmpty, ${fetchReposFuture.status}';
+  String get storeStatusString => 'searchToken: $searchToken,status: $status';
+
+  @computed
+  StoreStatus get status {
+    if (fetchReposFuture == emptyResponse && searchToken.isEmpty) {
+      return StoreStatus.initial;
+    }
+    if (fetchReposFuture.status == FutureStatus.fulfilled &&
+        isRepositoryListEmpty &&
+        searchToken.isNotEmpty &&
+        !isPending) {
+      return StoreStatus.emptyResult;
+    }
+    if (!isRepositoryListEmpty &&
+        fetchReposFuture.status == FutureStatus.fulfilled) {
+      return StoreStatus.hasResults;
+    }
+    if (fetchReposFuture.status == FutureStatus.rejected) {
+      return StoreStatus.error;
+    }
+    if (fetchReposFuture.status == FutureStatus.pending) {
+      return StoreStatus.waitingForNetwork;
+    }
+    if (waitingForKeyboard) {
+      return StoreStatus.waitingForKeyboard;
+    }
+    return StoreStatus.unknown;
+  }
 
   @action
   void setSearchToken(String text) {
@@ -71,18 +110,17 @@ abstract class _GithubStore implements Store {
     searchToken = text;
     fetchReposFuture = emptyResponse;
     setRepositories([]);
-    waitingForInputCompletion = true;
+    waitingForKeyboard = true;
   }
 
   @action
   Future<void> fetchRepos() async {
+    waitingForKeyboard = false;
     if (searchToken == null || searchToken.trim() == '') {
-      waitingForInputCompletion = false;
       return;
     }
     final future = githubRepository.search(searchToken);
     fetchReposFuture = ObservableFuture(future);
-    waitingForInputCompletion = false;
     try {
       setRepositories((await future).items);
     } catch (e) {}
@@ -91,7 +129,7 @@ abstract class _GithubStore implements Store {
   @action
   setRepositories(List<SearchResultItem> value) {
     _repositories = value;
-    isEmpty = _repositories.isEmpty;
+    isRepositoryListEmpty = _repositories.isEmpty;
   }
 
   void close() {

@@ -8,7 +8,7 @@ main() async {
   var store = GithubStore(client, debounceMilliseconds: 3000);
   ReactionDisposer disposer;
   disposer = autorun((_) {
-    print(store.statusDescription);
+    print(store.storeStatusString);
     if (store.hasResults ||
         store.fetchReposFuture.status == FutureStatus.rejected) {
       print('Closing');

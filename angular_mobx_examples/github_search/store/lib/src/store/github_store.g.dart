@@ -19,6 +19,12 @@ mixin _$GithubStore on _GithubStore, Store {
   @override
   bool get isPending =>
       (_$isPendingComputed ??= Computed<bool>(() => super.isPending)).value;
+  Computed<bool> _$waitingForNetworkComputed;
+
+  @override
+  bool get waitingForNetwork => (_$waitingForNetworkComputed ??=
+          Computed<bool>(() => super.waitingForNetwork))
+      .value;
   Computed<bool> _$resultIsEmptyComputed;
 
   @override
@@ -33,9 +39,14 @@ mixin _$GithubStore on _GithubStore, Store {
   Computed<String> _$statusDescriptionComputed;
 
   @override
-  String get statusDescription => (_$statusDescriptionComputed ??=
-          Computed<String>(() => super.statusDescription))
+  String get storeStatusString => (_$statusDescriptionComputed ??=
+          Computed<String>(() => super.storeStatusString))
       .value;
+  Computed<StoreStatus> _$statusComputed;
+
+  @override
+  StoreStatus get status =>
+      (_$statusComputed ??= Computed<StoreStatus>(() => super.status)).value;
 
   final _$searchTokenAtom = Atom(name: '_GithubStore.searchToken');
 
@@ -52,21 +63,20 @@ mixin _$GithubStore on _GithubStore, Store {
     _$searchTokenAtom.reportChanged();
   }
 
-  final _$waitingForInputCompletionAtom =
-      Atom(name: '_GithubStore.waitingForInputCompletion');
+  final _$waitingForKeyboardAtom =
+      Atom(name: '_GithubStore.waitingForKeyboard');
 
   @override
-  bool get waitingForInputCompletion {
-    _$waitingForInputCompletionAtom.reportObserved();
-    return super.waitingForInputCompletion;
+  bool get waitingForKeyboard {
+    _$waitingForKeyboardAtom.reportObserved();
+    return super.waitingForKeyboard;
   }
 
   @override
-  set waitingForInputCompletion(bool value) {
-    mainContext
-        .checkIfStateModificationsAreAllowed(_$waitingForInputCompletionAtom);
-    super.waitingForInputCompletion = value;
-    _$waitingForInputCompletionAtom.reportChanged();
+  set waitingForKeyboard(bool value) {
+    mainContext.checkIfStateModificationsAreAllowed(_$waitingForKeyboardAtom);
+    super.waitingForKeyboard = value;
+    _$waitingForKeyboardAtom.reportChanged();
   }
 
   final _$fetchReposFutureAtom = Atom(name: '_GithubStore.fetchReposFuture');
@@ -84,19 +94,21 @@ mixin _$GithubStore on _GithubStore, Store {
     _$fetchReposFutureAtom.reportChanged();
   }
 
-  final _$isEmptyAtom = Atom(name: '_GithubStore.isEmpty');
+  final _$isRepositoryListEmptyAtom =
+      Atom(name: '_GithubStore.isRepositoryListEmpty');
 
   @override
-  bool get isEmpty {
-    _$isEmptyAtom.reportObserved();
-    return super.isEmpty;
+  bool get isRepositoryListEmpty {
+    _$isRepositoryListEmptyAtom.reportObserved();
+    return super.isRepositoryListEmpty;
   }
 
   @override
-  set isEmpty(bool value) {
-    mainContext.checkIfStateModificationsAreAllowed(_$isEmptyAtom);
-    super.isEmpty = value;
-    _$isEmptyAtom.reportChanged();
+  set isRepositoryListEmpty(bool value) {
+    mainContext
+        .checkIfStateModificationsAreAllowed(_$isRepositoryListEmptyAtom);
+    super.isRepositoryListEmpty = value;
+    _$isRepositoryListEmptyAtom.reportChanged();
   }
 
   final _$fetchReposAsyncAction = AsyncAction('fetchRepos');
