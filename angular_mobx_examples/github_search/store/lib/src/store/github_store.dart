@@ -73,7 +73,7 @@ abstract class _GithubStore implements Store {
   bool get isRejected => fetchReposFuture.status == FutureStatus.rejected;
 
   @computed
-  String get storeStatusString => 'searchToken: $searchToken,status: $status';
+  String get storeStatusString => 'status: $status, searchToken: $searchToken';
 
   @computed
   StoreStatus get status {
