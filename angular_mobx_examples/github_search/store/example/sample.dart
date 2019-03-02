@@ -1,28 +1,22 @@
 //import 'package:github/server.dart';
 import 'package:store/store.dart';
+import 'package:mobx/mobx.dart';
 import 'package:http/http.dart' as http;
-  main() async {
-    var client = http.Client();
-    var store = GithubStore(client,debounceMilliseconds: 1);
-    for (var n = 0; n < 20; n++) {
-      try {
-         store.setSearchToken(n.toString());
-        await store.fetchRepos();
 
-        var repos = store.repositories;
-        print('${store.status} Repos ${repos.length}');
-        if (store.status == StoreStatus.rejected) {
-          print(store.error);
-          client.close();
-          return;
-        }
-        if (repos.isNotEmpty) {
-          print('${repos.first.fullName}');
-        }
-      } catch (error) {
-        print('Error $error');
-        store.close();
-        return;
-      }
+main() async {
+  var client = http.Client();
+  var store = GithubStore(client, debounceMilliseconds: 3000);
+  ReactionDisposer disposer;
+  disposer = autorun((_) {
+    print(store.statusDescription);
+    if (store.hasResults ||
+        store.fetchReposFuture.status == FutureStatus.rejected) {
+      print('Closing');
+      disposer();
+      client.close();
     }
-  }
+  });
+  store.setSearchToken('111111111');
+  store.setSearchToken('22222222');
+  store.setSearchToken('objectory');
+}

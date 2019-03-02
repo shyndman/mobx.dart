@@ -1,6 +1,5 @@
 import 'package:angular/angular.dart';
-import 'package:github/browser.dart';
-
+import 'package:store/store.dart';
 
 @Component(
   selector: 'github-search-result-item',
@@ -8,5 +7,5 @@ import 'package:github/browser.dart';
 )
 class SearchResultItemComponent {
   @Input()
-  Repository item;
+  SearchResultItem item;
 }

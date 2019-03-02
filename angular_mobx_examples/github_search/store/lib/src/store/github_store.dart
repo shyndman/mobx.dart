@@ -1,103 +1,101 @@
 import 'dart:async';
 import 'package:mobx/mobx.dart';
 import 'package:http/http.dart' as http;
-import 'package:stream_transform/stream_transform.dart';
 import '../github.dart';
+import 'debouncer.dart';
 
 part 'github_store.g.dart';
 
 class GithubStore = _GithubStore with _$GithubStore;
 
-enum StoreStatus { empty, pending, fulfilled, rejected }
-
 abstract class _GithubStore implements Store {
   GithubRepository githubRepository;
-
-  var _rawSearches = StreamController<String>();
-  Stream<String> _debouncedSearches;
-  StreamSubscription<String> _searchSubscription;
+  Debouncer debouncer;
   http.Client httpClient;
-  bool debouncing = false;
-  int debounceMilliseconds;
 
-  _GithubStore(this.httpClient, {this.debounceMilliseconds = 500}) {
+  _GithubStore(this.httpClient, {int debounceMilliseconds = 0}) {
     githubRepository = createRepository(httpClient);
+    if (debounceMilliseconds != 0) {
+      debouncer = Debouncer(
+          () => searchToken, (_) => fetchRepos(), debounceMilliseconds);
+    }
   }
 
-  startDebouncing() {
-    _debouncedSearches = _rawSearches.stream
-        .transform(debounce(Duration(milliseconds: debounceMilliseconds)));
-    _searchSubscription = _debouncedSearches.listen((_) => fetchRepos());
-    debouncing = true;
-  }
+  static ObservableFuture emptyResponse =
+      ObservableFuture.value(SearchResult.empty);
 
-// No need to observe this as we are relying on the fetchReposFuture.status
-  @observable
-  List<SearchResultItem> repositories = [];
+  List<SearchResultItem> _repositories = [];
 
-  @observable
-  StoreStatus status = StoreStatus.empty;
+  List<SearchResultItem> get repositories => _repositories;
 
   @observable
   String searchToken = '';
 
   @observable
-  String error = '';
+  bool waitingForInputCompletion = false;
 
-  Future<List<SearchResult>> searchFuture;
+  @observable
+  ObservableFuture fetchReposFuture = emptyResponse;
+
+  @observable
+  bool isEmpty = true;
 
   @computed
   bool get hasResults =>
-      status == StoreStatus.fulfilled && repositories.isNotEmpty;
+      !isEmpty && fetchReposFuture.status == FutureStatus.fulfilled;
 
-  static ObservableFuture<List<SearchResult>> emptyResponse =
-      ObservableFuture.value([]);
+  @computed
+  bool get isPending =>
+      fetchReposFuture.status == FutureStatus.pending ||
+      waitingForInputCompletion;
 
-  @action
-  startSearch() {
-    repositories = [];
-    setStatus(StoreStatus.pending);
-  }
+  @computed
+  bool get resultIsEmpty =>
+      fetchReposFuture.status == FutureStatus.fulfilled &&
+      isEmpty &&
+      searchToken.isNotEmpty &&
+      !isPending;
 
-  @action
-  void completeWithSuccess(List<SearchResultItem> repos) {
-    repositories = repos;
-    setStatus(StoreStatus.fulfilled);
-  }
+  @computed
+  bool get isRejected => fetchReposFuture.status == FutureStatus.rejected;
 
-  void completeWithError(String errorMessage) {
-    error = errorMessage;
-    setStatus(StoreStatus.rejected);
-  }
-
-  @action
-  void setStatus(StoreStatus newStatus) {
-    status = newStatus;
-  }
+  @computed
+  String get statusDescription =>
+      'searchToken: $searchToken, isPending: $isPending, resultIsEmpty $resultIsEmpty, waitingForInput: $waitingForInputCompletion, hasResults: $hasResults, count: ${repositories.length}, isEmpty: $isEmpty, ${fetchReposFuture.status}';
 
   @action
   void setSearchToken(String text) {
-    searchToken = text;
-    if (debouncing) {
-      _rawSearches.add(searchToken);
+    if (searchToken == text) {
+      return;
     }
+    searchToken = text;
+    fetchReposFuture = emptyResponse;
+    setRepositories([]);
+    waitingForInputCompletion = true;
+  }
+
+  @action
+  Future<void> fetchRepos() async {
+    if (searchToken == null || searchToken.trim() == '') {
+      waitingForInputCompletion = false;
+      return;
+    }
+    final future = githubRepository.search(searchToken);
+    fetchReposFuture = ObservableFuture(future);
+    waitingForInputCompletion = false;
+    try {
+      setRepositories((await future).items);
+    } catch (e) {}
+  }
+
+  @action
+  setRepositories(List<SearchResultItem> value) {
+    _repositories = value;
+    isEmpty = _repositories.isEmpty;
   }
 
   void close() {
-    _searchSubscription.cancel;
-  }
-
-  Future<void> fetchRepos() async {
-    if (searchToken.isEmpty) {
-      setStatus(StoreStatus.empty);
-      return;
-    }
-    try {
-      startSearch();
-      var repos = await githubRepository.search(searchToken);
-      completeWithSuccess(repos.items);
-    } catch (error) {
-      completeWithError(error.toString());
-    }
+    httpClient.close();
+    debouncer?.close();
   }
 }

@@ -1,5 +1,4 @@
 import 'package:angular/angular.dart';
-import 'package:mobx/mobx.dart';
 import 'package:store/store.dart';
 
 @Component(

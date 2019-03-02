@@ -14,36 +14,28 @@ mixin _$GithubStore on _GithubStore, Store {
   @override
   bool get hasResults =>
       (_$hasResultsComputed ??= Computed<bool>(() => super.hasResults)).value;
-
-  final _$repositoriesAtom = Atom(name: '_GithubStore.repositories');
-
-  @override
-  List<SearchResultItem> get repositories {
-    _$repositoriesAtom.reportObserved();
-    return super.repositories;
-  }
+  Computed<bool> _$isPendingComputed;
 
   @override
-  set repositories(List<SearchResultItem> value) {
-    mainContext.checkIfStateModificationsAreAllowed(_$repositoriesAtom);
-    super.repositories = value;
-    _$repositoriesAtom.reportChanged();
-  }
-
-  final _$statusAtom = Atom(name: '_GithubStore.status');
+  bool get isPending =>
+      (_$isPendingComputed ??= Computed<bool>(() => super.isPending)).value;
+  Computed<bool> _$resultIsEmptyComputed;
 
   @override
-  StoreStatus get status {
-    _$statusAtom.reportObserved();
-    return super.status;
-  }
+  bool get resultIsEmpty =>
+      (_$resultIsEmptyComputed ??= Computed<bool>(() => super.resultIsEmpty))
+          .value;
+  Computed<bool> _$isRejectedComputed;
 
   @override
-  set status(StoreStatus value) {
-    mainContext.checkIfStateModificationsAreAllowed(_$statusAtom);
-    super.status = value;
-    _$statusAtom.reportChanged();
-  }
+  bool get isRejected =>
+      (_$isRejectedComputed ??= Computed<bool>(() => super.isRejected)).value;
+  Computed<String> _$statusDescriptionComputed;
+
+  @override
+  String get statusDescription => (_$statusDescriptionComputed ??=
+          Computed<String>(() => super.statusDescription))
+      .value;
 
   final _$searchTokenAtom = Atom(name: '_GithubStore.searchToken');
 
@@ -60,58 +52,77 @@ mixin _$GithubStore on _GithubStore, Store {
     _$searchTokenAtom.reportChanged();
   }
 
-  final _$errorAtom = Atom(name: '_GithubStore.error');
+  final _$waitingForInputCompletionAtom =
+      Atom(name: '_GithubStore.waitingForInputCompletion');
 
   @override
-  String get error {
-    _$errorAtom.reportObserved();
-    return super.error;
+  bool get waitingForInputCompletion {
+    _$waitingForInputCompletionAtom.reportObserved();
+    return super.waitingForInputCompletion;
   }
 
   @override
-  set error(String value) {
-    mainContext.checkIfStateModificationsAreAllowed(_$errorAtom);
-    super.error = value;
-    _$errorAtom.reportChanged();
+  set waitingForInputCompletion(bool value) {
+    mainContext
+        .checkIfStateModificationsAreAllowed(_$waitingForInputCompletionAtom);
+    super.waitingForInputCompletion = value;
+    _$waitingForInputCompletionAtom.reportChanged();
+  }
+
+  final _$fetchReposFutureAtom = Atom(name: '_GithubStore.fetchReposFuture');
+
+  @override
+  ObservableFuture get fetchReposFuture {
+    _$fetchReposFutureAtom.reportObserved();
+    return super.fetchReposFuture;
+  }
+
+  @override
+  set fetchReposFuture(ObservableFuture value) {
+    mainContext.checkIfStateModificationsAreAllowed(_$fetchReposFutureAtom);
+    super.fetchReposFuture = value;
+    _$fetchReposFutureAtom.reportChanged();
+  }
+
+  final _$isEmptyAtom = Atom(name: '_GithubStore.isEmpty');
+
+  @override
+  bool get isEmpty {
+    _$isEmptyAtom.reportObserved();
+    return super.isEmpty;
+  }
+
+  @override
+  set isEmpty(bool value) {
+    mainContext.checkIfStateModificationsAreAllowed(_$isEmptyAtom);
+    super.isEmpty = value;
+    _$isEmptyAtom.reportChanged();
+  }
+
+  final _$fetchReposAsyncAction = AsyncAction('fetchRepos');
+
+  @override
+  Future<void> fetchRepos() {
+    return _$fetchReposAsyncAction.run(() => super.fetchRepos());
   }
 
   final _$_GithubStoreActionController = ActionController(name: '_GithubStore');
-
-  @override
-  dynamic startSearch() {
-    final _$actionInfo = _$_GithubStoreActionController.startAction();
-    try {
-      return super.startSearch();
-    } finally {
-      _$_GithubStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void completeWithSuccess(List<SearchResultItem> repos) {
-    final _$actionInfo = _$_GithubStoreActionController.startAction();
-    try {
-      return super.completeWithSuccess(repos);
-    } finally {
-      _$_GithubStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setStatus(StoreStatus newStatus) {
-    final _$actionInfo = _$_GithubStoreActionController.startAction();
-    try {
-      return super.setStatus(newStatus);
-    } finally {
-      _$_GithubStoreActionController.endAction(_$actionInfo);
-    }
-  }
 
   @override
   void setSearchToken(String text) {
     final _$actionInfo = _$_GithubStoreActionController.startAction();
     try {
       return super.setSearchToken(text);
+    } finally {
+      _$_GithubStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setRepositories(List<SearchResultItem> value) {
+    final _$actionInfo = _$_GithubStoreActionController.startAction();
+    try {
+      return super.setRepositories(value);
     } finally {
       _$_GithubStoreActionController.endAction(_$actionInfo);
     }

@@ -11,6 +11,6 @@ class SearchResultError {
 
   @override
   String toString() {
-    return 'SearchResultError{message: $message}';
+    return message;
   }
 }

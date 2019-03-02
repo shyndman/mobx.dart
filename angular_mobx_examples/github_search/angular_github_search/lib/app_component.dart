@@ -1,12 +1,34 @@
 import 'package:angular/angular.dart';
+import 'package:http/browser_client.dart';
+import 'package:mobx/mobx.dart';
 
 import 'package:angular_github_search/src/github_search.dart';
-import 'package:github/browser.dart';
 import 'package:store/store.dart';
 
+const millisecondsToDelay = 500;
+
+ReactionDisposer logState(GithubStore store) {
+  return autorun((_) {
+    print(store.statusDescription);
+  });
+}
+
 GithubStore makeStore() {
-  var github = createGitHubClient();
-  var store = GithubStore(github, debounceMilliseconds: 0);
+  var httpClient = BrowserClient();
+  var store =
+      GithubStore(httpClient, debounceMilliseconds: millisecondsToDelay);
+  logState(store);
+  return store;
+}
+
+GithubStore makeStoreWithMobxDelay() {
+  var httpClient = BrowserClient();
+  var store = GithubStore(httpClient);
+  autorun((_) {
+    store.searchToken;
+    store.fetchRepos();
+  }, delay: millisecondsToDelay);
+  logState(store);
   return store;
 }
 

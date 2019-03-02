@@ -9,8 +9,6 @@ dependencies:
   angular_components: ^0.12.0
   angular_mobx:
     path: ../../../angular_mobx
-  github:
-    path: ../../../../github.dart
   store:
     path: ../store
   mobx: ^0.0.36
