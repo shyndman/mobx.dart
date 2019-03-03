@@ -1,10 +1,10 @@
 <li [class.completed]="todo.done" [class.editing]="todo.editing">
     <div class="view" [hidden]="todo.editing">
-        <input class="toggle" type="checkbox" [checked]="todo.done" (change)="todo.toggleStatus()">
+        <input class="toggle" type="checkbox" [checked]="todo.done" (change)="todos.toggleStatus(todo)">
         <label #label>{{todo.description}}</label>
         <button class="destroy" (click)="todos.removeTodo(todo)"></button>
     </div>
     <input class="edit" *ngIf="todo.editing" [value]="todo.description" #editedtodo
-           (blur)="todos.saveChanges(todo, editedtodo.value)" (keyup.enter)="todos.saveChanges(todo,editedtodo.value)"
+           (blur)="todos.saveEditing(todo, editedtodo.value)" (keyup.enter)="todos.saveEditing(todo,editedtodo.value)"
            (keyup.escape)="todos.cancelEditing()">
 </li>

@@ -1,32 +1,20 @@
 import 'package:mobx/mobx.dart';
+import 'todo.dart';
+import 'todo_db.dart';
 
-part 'todos.g.dart';
-
-class Todo = TodoBase with _$Todo;
-
-abstract class TodoBase implements Store {
-  TodoBase(this.description);
-
-  @observable
-  String description = '';
-
-  @observable
-  bool done = false;
-
-  @observable
-  bool editing = false;
-
-  @action
-  void toggleStatus() {
-    done = !done;
-  }
-}
+part 'todo_list.g.dart';
 
 enum VisibilityFilter { all, pending, completed }
 
-class TodoList = TodoListBase with _$TodoList;
+class TodoList = _TodoList with _$TodoList;
 
-abstract class TodoListBase implements Store {
+abstract class _TodoList implements Store {
+  TodoDb todoDb;
+
+  _TodoList(this.todoDb) {
+    _loadFromDb();
+  }
+
   @observable
   ObservableList<Todo> todos = ObservableList<Todo>();
 
@@ -88,14 +76,16 @@ abstract class TodoListBase implements Store {
     if (description == null || description == '') {
       return;
     }
-    final todo = Todo(description);
+    final todo = Todo(description, false);
     todos.add(todo);
     currentDescription = '';
+    _saveToDb();
   }
 
   @action
   void removeTodo(Todo todo) {
     todos.removeWhere((x) => x == todo);
+    _saveToDb();
   }
 
   @action
@@ -108,6 +98,7 @@ abstract class TodoListBase implements Store {
   @action
   void removeCompleted() {
     todos.removeWhere((todo) => todo.done);
+    _saveToDb();
   }
 
   @action
@@ -115,6 +106,7 @@ abstract class TodoListBase implements Store {
     for (final todo in todos) {
       todo.done = true;
     }
+    _saveToDb();
   }
 
   @action
@@ -128,6 +120,7 @@ abstract class TodoListBase implements Store {
         todo.done = true;
       }
     }
+    _saveToDb();
   }
 
   @observable
@@ -149,8 +142,8 @@ abstract class TodoListBase implements Store {
   }
 
   @action
-  void saveChanges(Todo todo, String newDescription) {
-    if(!todo.editing) {
+  void saveEditing(Todo todo, String newDescription) {
+    if (!todo.editing) {
       return;
     }
     todo.description = newDescription;
@@ -158,5 +151,23 @@ abstract class TodoListBase implements Store {
     if ((todo.description ?? '') == '') {
       todos.remove(todo);
     }
+    _saveToDb();
+  }
+
+  @action
+  void toggleStatus(Todo todo) {
+    todo.done = !todo.done;
+    todoDb.save(todos);
+  }
+
+  @action
+  Future<void> _loadFromDb() async {
+    todos.clear();
+    var savedData = await todoDb.load();
+    todos.addAll(savedData);
+  }
+
+  Future<void> _saveToDb() {
+    todoDb.save(todos);
   }
 }
