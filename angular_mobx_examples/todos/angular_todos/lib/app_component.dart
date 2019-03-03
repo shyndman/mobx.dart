@@ -1,6 +1,7 @@
 import 'package:angular/angular.dart';
 import 'package:angular_forms/angular_forms.dart';
 import 'package:store/browser.dart';
+
 import 'src/footer/footer_component.dart';
 import 'src/section/section_component.dart';
 

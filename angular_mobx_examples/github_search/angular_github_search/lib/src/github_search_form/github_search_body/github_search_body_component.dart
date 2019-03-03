@@ -13,8 +13,9 @@ import 'package:angular_github_search/src/github_search.dart';
     MaterialSpinnerComponent,
     MaterialIconComponent,
     SearchResultsComponent,
-    MobxAutorun,
+    MobxObserver,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   exports: [StoreStatus]
 )
 class SearchBodyComponent {

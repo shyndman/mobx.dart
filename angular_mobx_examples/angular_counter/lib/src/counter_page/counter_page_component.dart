@@ -8,7 +8,7 @@ import 'package:angular_mobx/angular_mobx.dart';
   selector: 'counter-page',
   templateUrl: 'counter_page_component.html',
   styleUrls: ['counter_page_component.css'],
-  directives: [MaterialFabComponent, MobxAutorun],
+  directives: [MaterialFabComponent, MobxObserver],
   changeDetection: ChangeDetectionStrategy.OnPush,
 )
 class CounterPageComponent {

@@ -3,8 +3,8 @@
 import 'package:angular_test/angular_test.dart';
 import 'package:test/test.dart';
 
-import 'components/test_autorun_component.dart';
-import 'components/test_autorun_component.template.dart' as ng;
+import 'components/test_observer_component.dart';
+import 'components/test_observer_component.template.dart' as ng;
 import 'test_library.dart';
 
 

@@ -5,8 +5,8 @@ import 'package:angular_mobx/angular_mobx.dart';
 @Component(
     selector: 'app-footer',
     templateUrl: 'footer_component.html',
-    directives: [NgIf],
-    exports: [VisibilityFilter, MobxAutorun])
+    directives: [NgIf, MobxObserver],
+    exports: [VisibilityFilter])
 class FooterComponent {
   TodoList todos;
 

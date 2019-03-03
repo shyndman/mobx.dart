@@ -9,5 +9,6 @@ import 'package:angular_github_search/src/github_search.dart';
     SearchBarComponent,
     SearchBodyComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 )
 class SearchFormComponent {}

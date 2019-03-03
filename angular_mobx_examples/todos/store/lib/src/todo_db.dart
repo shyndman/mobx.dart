@@ -1,19 +1,19 @@
 import 'todo.dart';
 
 abstract class TodoDb {
-  Future<List<Todo>> load();
+  List<Todo> load();
 
-  Future<void> save(List<Todo> value);
+  void save(List<Todo> value);
 }
 
 class MockTodoDb extends TodoDb {
   List<Todo> content = [];
 
-  Future<List<Todo>> load() async {
+  List<Todo> load() {
     return content;
   }
 
-  Future<void> save(List<Todo> value) async {
+  void save(List<Todo> value) {
     content = value;
   }
 }

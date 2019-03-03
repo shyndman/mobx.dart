@@ -14,7 +14,7 @@ TodoList makeTodos() {
 }
 
 class TodoDbBrowser implements TodoDb {
-  Future<List<Todo>> load() async {
+  List<Todo> load() {
     try {
       var content = window.localStorage[storageKey];
       if (content == null) {
@@ -33,7 +33,7 @@ class TodoDbBrowser implements TodoDb {
     }
   }
 
-  Future<void> save(List<Todo> value) async {
+  void save(List<Todo> value) {
     var jsonContent = value.map((e) => TodoSerializer.toJson(e)).toList();
     window.localStorage[storageKey] = json.encode(jsonContent);
   }

@@ -12,7 +12,7 @@ abstract class _TodoList implements Store {
   TodoDb todoDb;
 
   _TodoList(this.todoDb) {
-    _loadFromDb();
+    loadData();
   }
 
   @observable
@@ -23,6 +23,9 @@ abstract class _TodoList implements Store {
 
   @observable
   String currentDescription = '';
+
+  @observable
+  Todo editedTodo;
 
   @computed
   ObservableList<Todo> get pendingTodos =>
@@ -123,9 +126,6 @@ abstract class _TodoList implements Store {
     _saveToDb();
   }
 
-  @observable
-  Todo editedTodo;
-
   @action
   void startEditing(Todo todo) {
     cancelEditing();
@@ -143,6 +143,7 @@ abstract class _TodoList implements Store {
 
   @action
   void saveEditing(Todo todo, String newDescription) {
+    print('saveEditing $newDescription');
     if (!todo.editing) {
       return;
     }
@@ -161,13 +162,13 @@ abstract class _TodoList implements Store {
   }
 
   @action
-  Future<void> _loadFromDb() async {
+  void loadData() {
     todos.clear();
-    var savedData = await todoDb.load();
+    final savedData = todoDb.load();
     todos.addAll(savedData);
   }
 
-  Future<void> _saveToDb() {
+  void _saveToDb() {
     todoDb.save(todos);
   }
 }

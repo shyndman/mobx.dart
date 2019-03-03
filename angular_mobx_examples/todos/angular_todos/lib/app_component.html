@@ -2,7 +2,9 @@
     <header id="header">
         <h1>todos</h1>
         <form name="new-todo" id="todo-form" (submit)="addTodo()">
-            <input id="new-todo" name="title" placeholder="What needs to be done?" [(ngModel)]="todos.currentDescription" autofocus>
+            <input id="new-todo" name="title" placeholder="What needs to be done?"
+                   [(ngModel)]="todos.currentDescription"
+                   autofocus>
         </form>
     </header>
     <app-section></app-section>

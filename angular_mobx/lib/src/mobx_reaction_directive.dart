@@ -4,7 +4,7 @@ import 'package:mobx/mobx.dart';
 import 'mobx_autorun_directive.dart';
 
 @Directive(selector: '[mobxReaction]')
-class MobxReaction extends MobxAutorun {
+class MobxReaction extends MobxObserver {
   dynamic Function(Reaction) _reaction;
 
   @Input()

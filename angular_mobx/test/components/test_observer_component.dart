@@ -5,7 +5,7 @@ import 'package:angular_mobx/angular_mobx.dart';
 @Component(
   selector: 'my-app',
   template: '''
-<div *mobxAutorun>
+<div *observer>
   <input type="checkbox" [checked]="store.isAdult"  (change)="store.toggleAdult()">
   <span id="fullname">{{store.fullName}}</span>
 </div>
@@ -14,7 +14,7 @@ import 'package:angular_mobx/angular_mobx.dart';
 
   ''',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  directives: [MobxAutorun],
+  directives: [MobxObserver],
 )
 class TestAutorunComponent {
   var store = globalStore;

@@ -1,4 +1,4 @@
-<div *mobxAutorun>
+<div *observer>
     <section id="main" ng-show="todos.todos.isNotEmpty" class="">
         <input id="toggle-all" type="checkbox" [checked]="todos.allTasksAreCompleted"
                (change)="todos.batchedToggleCompletion()">

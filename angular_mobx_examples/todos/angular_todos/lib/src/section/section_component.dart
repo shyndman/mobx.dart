@@ -8,7 +8,7 @@ import 'todo_item/todo_item_component.dart';
     selector: 'app-section',
     templateUrl: 'section_component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    directives: [NgFor, NgIf, TodoItemComponent, MobxAutorun])
+    directives: [NgFor, NgIf, TodoItemComponent, MobxObserver])
 class SectionComponent {
   TodoList todos;
 

@@ -1,7 +1,7 @@
-<div *mobxAutorun>
+<div *observer>
     <footer id="footer">
         <div *ngIf="todos.todos.isNotEmpty">
-        <span id="todo-count" *mobxAutorun>
+        <span id="todo-count" *observer>
               <strong>{{todos.itemsDescription}}</strong>
         </span>
             <ul id="filters">
