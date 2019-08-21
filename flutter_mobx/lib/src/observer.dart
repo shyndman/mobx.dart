@@ -28,8 +28,12 @@ class Observer extends StatefulWidget {
   @visibleForTesting
   Reaction createReaction(Function() onInvalidate) {
     final ctx = context ?? mainContext;
-    return ReactionImpl(ctx, onInvalidate,
-        name: name ?? 'Observer@${ctx.nextId}');
+    return ReactionImpl(
+      ctx,
+      onInvalidate,
+      name: name ?? 'Observer@${ctx.nextId}',
+      onError: (error, _) => log(error.toString()),
+    );
   }
 
   @override

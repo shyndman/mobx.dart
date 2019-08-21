@@ -83,7 +83,7 @@ class ReactionImpl implements Reaction {
     }
 
     if (_context._hasCaughtException(this)) {
-      _reportException(_errorValue._exception);
+      _reportException(_errorValue.exception);
     }
 
     _context.endBatch();
@@ -102,9 +102,9 @@ class ReactionImpl implements Reaction {
     if (_context._shouldCompute(this)) {
       try {
         _onInvalidate();
-      } on Object catch (e) {
+      } on Object catch (e, st) {
         // Note: "on Object" accounts for both Error and Exception
-        _errorValue = MobXCaughtException(e);
+        _errorValue = MobXCaughtException(e, st);
         _reportException(e);
       }
     }
